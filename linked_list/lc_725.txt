@@ -1,0 +1,63 @@
+Given a (singly) linked list with head node root, write a function to split the linked list into k consecutive linked list "parts".
+
+The length of each part should be as equal as possible: no two parts should have a size differing by more than 1. This may lead to some parts being null.
+
+The parts should be in order of occurrence in the input list, and parts occurring earlier should always have a size greater than or equal parts occurring later.
+
+Return a List of ListNode's representing the linked list parts that are formed.
+
+Examples 1->2->3->4, k = 5 // 5 equal parts [ [1], [2], [3], [4], null ]
+-----------------------------------------------------------------------------------
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution:
+    def helper(self,num):
+        if num>0:
+            return 1
+        return 0
+
+    def splitListToParts(self, head: ListNode, k: int) -> List[ListNode]:
+        if not head:
+            return [None for i in range(k)]
+        if not head.next:
+            return [head] + [None for i in range(k-1)]
+        _size = 0
+        _temp = head
+        _lst = []
+        while _temp:
+            _lst.append(_temp)
+            _temp = _temp.next
+            _size += 1
+        if k>=_size:
+            _ans = []
+            for i in range(_size):
+                node = _lst[i]
+                node.next=None
+                _ans.append(node)
+            for i in range(k-_size):
+                _ans.append(None)
+            return _ans
+        else: #k<size
+            if _size % k==0:
+                _ans=[]
+                _num = _size//k
+                for i in range(k):
+                    _temp = _lst[i*_num:(i+1)*_num]
+                    _temp[-1].next=None
+                    _ans.append(_temp[0])
+                return _ans
+            else:
+                _ans = []
+                base_num = _size//k
+                rest = _size - base_num*k
+                for i in range(k):
+                    _temp = _lst[:base_num + self.helper(rest)]
+                    _lst = _lst[base_num + self.helper(rest):]
+                    rest -= 1
+                    _temp[-1].next=None
+                    _ans.append(_temp[0])
+                return _ans
