@@ -1,0 +1,39 @@
+Write a program to find the node at which the intersection of two singly linked lists begins.
+Input: intersectVal = 2, listA = [0,9,1,2,4], listB = [3,2,4], skipA = 3, skipB = 1
+Output: Reference of the node with value = 2
+Input Explanation: The intersected node's value is 2 (note that this must not be 0 if the two lists intersect). From the head of A, it reads as [0,9,1,2,4]. From the head of B, it reads as [3,2,4]. There are 3 nodes before the intersected node in A; There are 1 node before the intersected node in B.
+--------------------------------------------------
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
+
+         ListNode* temp1 = headA;
+    ListNode* temp2 = headB;
+    ListNode* store = NULL;
+
+    while(temp1 != NULL)
+    {
+        while(temp2 != NULL && temp1 != temp2)
+            temp2 = temp2->next;
+        if(temp2 == NULL)
+            temp2 = headB;
+        else if(temp1 == temp2)
+        {
+            store = temp1;
+            break;
+        }
+        temp1 = temp1->next;
+    }
+    return store;
+
+
+    }
+};

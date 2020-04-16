@@ -1,0 +1,61 @@
+Given a linked list and a value x, partition it such that all nodes less than x come before nodes greater than or equal to x.
+
+You should preserve the original relative order of the nodes in each of the two partitions.
+
+Example:
+
+Input: head = 1->4->3->2->5->2, x = 3
+Output: 1->2->2->4->3->5
+-------------------------------------------------
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* partition(ListNode* head, int x) {
+        if (head==NULL or head->next==NULL)
+        {
+            return head;
+        }
+        //ListNode* head1 = head;
+        using namespace std;
+        vector<ListNode*> less;
+        vector<ListNode*> greater;
+        while (head)
+        {
+            if (head->val<x)
+            {
+                less.push_back(head);
+            }
+            else
+            {
+                greater.push_back(head);
+            }
+            head=head->next;
+        }
+        if (less.size()==0)
+        {
+            return greater[0];
+        }
+        if (greater.size()==0)
+        {
+            return less[0];
+        }
+        for (size_t i =0;i<less.size()-1;i++)
+        {
+            less[i]->next= less[i+1];
+        }
+        less[less.size()-1]->next = greater[0];
+        for (size_t i=0; i <greater.size()-1;i++)
+        {
+            greater[i]->next=greater[i+1];
+        }
+        greater[greater.size()-1]->next=NULL;
+        return less[0];
+    }
+};

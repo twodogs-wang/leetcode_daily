@@ -1,0 +1,55 @@
+Given a singly linked list L: L0¡úL1¡ú¡­¡úLn-1¡úLn,
+reorder it to: L0¡úLn¡úL1¡úLn-1¡úL2¡úLn-2¡ú¡­
+
+You may not modify the values in the list's nodes, only nodes itself may be changed.
+
+Example 1:
+
+Given 1->2->3->4, reorder it to 1->4->2->3.
+Example 2:
+
+Given 1->2->3->4->5, reorder it to 1->5->2->4->3.
+-----------------------------------------------
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    void reorderList(ListNode* head) {
+        using namespace std;
+        vector<ListNode*> my_vector;// = vector<ListNode*>;
+        if (head==NULL || head->next==NULL || head->next->next==NULL)
+        {
+            return;
+        }
+        while(head!=NULL)
+        {
+            my_vector.push_back(head);
+            head=head->next;
+        }
+        //if
+        size_t start = 0;
+        size_t next = start+1;
+        size_t end = my_vector.size()-1;
+        //prev = start;
+        while (start<end)
+        {
+            my_vector[start]->next = my_vector[end];
+            my_vector[end]->next = my_vector[next];
+            start+=1;
+            end-=1;
+            next+=1;
+            if (start==end-1)
+            {
+                break;
+            }
+        }
+        my_vector[end]->next=NULL;
+
+    }
+};
