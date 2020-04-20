@@ -1,0 +1,52 @@
+Given a non-negative integer represented as non-empty a singly linked list of digits, plus one to the integer.
+
+You may assume the integer do not contain any leading zero, except the number 0 itself.
+
+The digits are stored such that the most significant digit is at the head of the list.
+
+Example :
+
+Input: [1,2,3]
+Output: [1,2,4]
+------------------------------------------
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution:
+    def reverse_linkdelist(self,head):
+        pre = None
+        while head:
+            nxt = head.next
+            head.next = pre
+            pre = head
+            head = nxt
+        return pre
+
+
+    def plusOne(self, head: ListNode) -> ListNode:
+        if head.next == None:
+            head.val+=1
+            if head.val>=10:
+                rest = head.val%10
+                head.val = 1
+                head.next = ListNode(0)
+            return head
+
+        head = self.reverse_linkdelist(head)
+        carry = 1
+        temp = head
+        while head and carry==1:
+            head.val += (carry)
+            carry = head.val//10
+            head.val = head.val%10
+            pre = head
+            head = head.next
+        if carry == 1:
+            pre.next = ListNode(1)
+
+        return self.reverse_linkdelist(temp)
+
+            
