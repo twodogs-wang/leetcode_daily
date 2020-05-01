@@ -1,0 +1,9 @@
+question: "https://leetcode.com/problems/ads-performance/"
+
+# Write your MySQL query statement below
+select ad_id,
+round(
+    IFNULL(100* sum(if(action="Clicked",1,0))/(sum(if(action="Clicked",1,0)) + sum(if(action="Viewed",1,0)))  
+    ,0) 
+,2)
+     as ctr from Ads group by ad_id order by ctr DESC, ad_id;
