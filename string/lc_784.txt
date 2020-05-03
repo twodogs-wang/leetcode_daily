@@ -1,0 +1,40 @@
+Given a string S, we can transform every letter individually to be lowercase or uppercase to create another string.  Return a list of all possible strings we could create.
+
+Examples:
+Input: S = "a1b2"
+Output: ["a1b2", "a1B2", "A1b2", "A1B2"]
+
+Input: S = "3z4"
+Output: ["3z4", "3Z4"]
+
+Input: S = "12345"
+Output: ["12345"]
+-----------------------------------------------------------------
+class Solution:
+    def __to_str(self,str):
+        _ans = ""
+        for i in str:
+            _ans+=i
+        return _ans
+    
+    
+    def __helper(self,s,_ans, level):
+        if len(s) == level:
+            return
+        self.__helper(s,_ans,level+1)
+        if not s[level].isalpha():
+            return
+        temp = s[:]
+        temp[level] = s[level].upper()
+        _ans.append(self.__to_str(temp))
+        self.__helper(temp,_ans,level+1)
+        
+        
+    def letterCasePermutation(self, S: str) -> List[str]:
+        _ans = []
+        if not S or len(S) == 0:
+            return [""]
+        S = S.lower()
+        _ans.append(S)
+        self.__helper(list(S),_ans, 0)
+        return _ans

@@ -1,0 +1,19 @@
+Given an array of 2n integers, your task is to group these integers into n pairs of integer, say (a1, b1), (a2, b2), ..., (an, bn) which makes sum of min(ai, bi) for all i from 1 to n as large as possible.
+
+Example 1:
+Input: [1,4,3,2]
+
+Output: 4
+Explanation: n is 2, and the maximum sum of pairs is 4 = min(1, 2) + min(3, 4).
+-------------------------------------------------------------------------------------------------
+class Solution:
+    def arrayPairSum(self, nums: List[int]) -> int:
+        nums.sort()
+        _sum = 0
+        for i in range(0,len(nums)-1,2):
+            _sum += nums[i]
+        return _sum
+---------------------------------------------------------------
+explain:
+we want the sum of the min of each pair to be minimum, we sort the array and take look.
+for each pair (a b), we just made a-b be minimum which maximize the sum. 
