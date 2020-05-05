@@ -1,0 +1,41 @@
+Given a collection of numbers that might contain duplicates, return all possible unique permutations.
+
+Example:
+
+Input: [1,1,2]
+Output:
+[
+  [1,1,2],
+  [1,2,1],
+  [2,1,1]
+]
+------------------------------------------------------------------------------------
+class Solution:
+    def __init__(self):
+        self.ans = []
+        self.dict = {}
+    def permuteUnique(self, nums: List[int]) -> List[List[int]]:
+        if not nums or len(nums) == 0:
+            return []
+        _register = [False for i in range(len(nums))]
+        self.__helper(nums, list(), _register, 0)
+        #del self.dict
+        return self.ans
+            
+    def __helper(self, nums, _sub_ans, _register, level):
+        if level == len(nums):
+            temp = tuple(_sub_ans)
+            if temp in self.dict:
+                return
+            self.ans.append(_sub_ans[:])
+            self.dict[temp] = 0
+            return
+        
+        for i in range(len(_register)):
+            if not _register[i]:
+                _sub_ans.append(nums[i])
+                _register[i] = True
+                self.__helper(nums, _sub_ans, _register, level + 1)
+                _register[i] = False
+                _sub_ans.pop()
+        
