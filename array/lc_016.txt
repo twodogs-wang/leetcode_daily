@@ -1,0 +1,39 @@
+Given an array nums of n integers and an integer target, find three integers in nums such that the sum is closest to target. Return the sum of the three integers. You may assume that each input would have exactly one solution.
+
+Example:
+
+Given array nums = [-1, 2, 1, -4], and target = 1.
+
+The sum that is closest to the target is 2. (-1 + 2 + 1 = 2).
+----------------------------------------------------
+class Solution:
+    def threeSumClosest(self, nums: List[int], target: int) -> int:
+        if not nums or len(nums) < 3:
+            return
+        self.min_comb = [0, float("inf")]
+        nums.sort()
+        for i in range(len(nums)-2):
+            temp = self.__helper(nums, i, target)
+            if temp == "yeah":
+                return target
+        return self.min_comb[1]
+            
+            
+            
+    def __helper(self, nums, i ,target):
+        l = i+1
+        r = len(nums)-1
+        while l<r:
+            _sum = nums[i] + nums[l] + nums[r]
+            if _sum - target == 0:
+                self.min_comb[0] = (i,l,r)
+                self.min_comb[1] = _sum
+                return "yeah"
+            elif _sum - target >= 0:
+                r-=1
+            else:
+                l+=1
+            if abs(_sum - target) < abs(self.min_comb[1]-target):
+                self.min_comb[0] = (i,l,r)
+                self.min_comb[1] = _sum
+        return "oop"
