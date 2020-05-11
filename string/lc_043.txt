@@ -1,0 +1,26 @@
+Given two non-negative integers num1 and num2 represented as strings, return the product of num1 and num2, also represented as a string.
+
+Example 1:
+
+Input: num1 = "2", num2 = "3"
+Output: "6"
+Example 2:
+
+Input: num1 = "123", num2 = "456"
+Output: "56088"
+-----------------------------------------------
+class Solution:
+    def __get_number(self, num1):
+        _num1 = 0
+        for i in list(num1):
+            _temp = ord(i) - ord("0")
+            _num1 = _num1*10 + _temp
+        return _num1
+    
+    def multiply(self, num1: str, num2: str) -> str:
+        if num1 == "0" or num2 == "0":
+            return "0"
+        _num1 = self.__get_number(num1)
+        _num2 = self.__get_number(num2)
+        print(_num1,_num2)
+        return str(_num1*_num2)

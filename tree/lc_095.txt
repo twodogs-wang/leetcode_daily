@@ -1,0 +1,53 @@
+Given an integer n, generate all structurally unique BST's (binary search trees) that store values 1 ... n.
+
+Example:
+
+Input: 3
+Output:
+[
+  [1,null,3,2],
+  [3,2,null,1],
+  [3,1,null,null,2],
+  [2,1,3],
+  [1,null,2,null,3]
+]
+Explanation:
+The above output corresponds to the 5 unique BST's shown below:
+
+   1         3     3      2      1
+    \       /     /      / \      \
+     3     2     1      1   3      2
+    /     /       \                 \
+   2     1         2                 3
+---------------------------------------------------
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def generateTrees(self, n: int) -> List[TreeNode]:
+        
+        return self.__helper(1, n+1)
+        
+    def __helper(self,start,end):
+        if start == end:
+            return []
+        res = []
+        for i in range(start, end):
+            left_trees = self.__helper(start, i)
+            right_trees = self.__helper(i + 1, end)
+            if len(left_trees) == 0 and len(right_trees) == 0:
+                res.append(TreeNode(i))
+            elif len(left_trees) == 0:
+                for rt in right_trees:
+                    res.append(TreeNode(i, None, rt))
+            elif len(right_trees) == 0:
+                for lt in left_trees:
+                    res.append(TreeNode(i, lt, None))
+            else:
+                for lt in left_trees:
+                    for rt in right_trees:
+                        res.append(TreeNode(i, lt, rt))
+        return res

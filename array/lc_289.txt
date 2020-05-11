@@ -1,0 +1,40 @@
+According to the Wikipedia's article: "The Game of Life, also known simply as Life, is a cellular automaton devised by the British mathematician John Horton Conway in 1970."
+
+Given a board with m by n cells, each cell has an initial state live (1) or dead (0). Each cell interacts with its eight neighbors (horizontal, vertical, diagonal) using the following four rules (taken from the above Wikipedia article):
+
+Write a function to compute the next state (after one update) of the board given its current state. The next state is created by applying the above rules simultaneously to every cell in the current state, where births and deaths occur simultaneously.
+
+
+----------------------------------------
+class Solution:
+    def gameOfLife(self, board: List[List[int]]) -> None:
+        """
+        Do not return anything, modify board in-place instead.
+        """
+        lives = []
+        dies = []
+        neighbour = [(0,1),(0,-1),(1,0),(-1,0),(1,1),(-1,-1),(-1,1),(1,-1)]
+        for i in range(len(board)):
+            for j in range(len(board[0])):
+                live_nei = 0
+                for k in neighbour:
+                    x = i + k[0]
+                    y = j + k[1]
+                    if 0<= x <len(board) and 0<=y < len(board[0]):
+                        if board[x][y] == 1:
+                            live_nei += 1
+                if board[i][j] == 1:
+                    if live_nei<2 or live_nei>3:
+                        dies.append((i,j))
+                    else:
+                        lives.append((i,j))
+                else:
+                    if live_nei == 3:
+                        lives.append((i,j))
+                    else:
+                        dies.append((i,j))
+        
+        for p in lives:
+            board[p[0]][p[1]] = 1
+        for p in dies:
+            board[p[0]][p[1]] = 0
