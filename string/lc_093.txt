@@ -1,0 +1,42 @@
+Given a string containing only digits, restore it by returning all possible valid IP address combinations.
+
+A valid IP address consists of exactly four integers (each integer is between 0 and 255) separated by single points.
+
+Example:
+
+Input: "25525511135"
+Output: ["255.255.11.135", "255.255.111.35"]
+------------------------------------------------
+class Solution:
+    def checkIfValid(self,_str):
+        if len(_str) >1 and _str[0]=="0":
+            return False
+        elif int(_str)<0 or int(_str)>255:
+            return False
+        return True
+    
+    def makeAnswer(self,arr):
+        #print(arr)
+        _ans=""
+        for i in arr:
+            _ans+=i+"."
+        return _ans[:-1]
+    
+    def backTrack(self, level, _str, remain):
+        if level == len(_str) and remain == 0:
+            self.ans.append(self.makeAnswer(self.segments))
+            return
+        for curr in range(level+1, level+4):
+            if curr > len(_str):
+                break
+            elif self.checkIfValid(_str[level:curr]):
+                self.segments.append(_str[level:curr])
+                self.backTrack(curr,_str,remain-1)
+                self.segments.pop()
+        
+    def restoreIpAddresses(self, s: str) -> List[str]:
+        if not s or int(s)>255255255255:
+            return []
+        self.ans, self.segments = [], []
+        self.backTrack(0, s, 4)
+        return self.ans

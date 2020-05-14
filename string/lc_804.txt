@@ -1,0 +1,36 @@
+International Morse Code defines a standard encoding where each letter is mapped to a series of dots and dashes, as follows: "a" maps to ".-", "b" maps to "-...", "c" maps to "-.-.", and so on.
+
+For convenience, the full table for the 26 letters of the English alphabet is given below:
+
+[".-","-...","-.-.","-..",".","..-.","--.","....","..",".---","-.-",".-..","--","-.","---",".--.","--.-",".-.","...","-","..-","...-",".--","-..-","-.--","--.."]
+Now, given a list of words, each word can be written as a concatenation of the Morse code of each letter. For example, "cba" can be written as "-.-..--...", (which is the concatenation "-.-." + "-..." + ".-"). We'll call such a concatenation, the transformation of a word.
+
+Return the number of different transformations among all words we have.
+
+Example:
+Input: words = ["gin", "zen", "gig", "msg"]
+Output: 2
+Explanation: 
+The transformation of each word is:
+"gin" -> "--...-."
+"zen" -> "--...-."
+"gig" -> "--...--."
+"msg" -> "--...--."
+---------------------------------------------------------
+class Solution:
+    def uniqueMorseRepresentations(self, words: List[str]) -> int:
+        arr = [".-","-...","-.-.","-..",".","..-.","--.","....","..",".---","-.-",".-..",\
+               "--","-.","---",".--.","--.-",".-.","...","-","..-","...-",".--","-..-","-.--"\
+               ,"--.."]
+        _dic = {}
+        for i in range(26):
+            _char = chr(ord("a")+i)
+            _dic[_char] = arr[i]
+        _new_dic = {}
+        for i in range(len(words)):
+            _temp = words[i]
+            _temp0 = ""
+            for j in list(_temp):
+                _temp0 += _dic[j]
+            _new_dic[_temp0] = 0
+        return len(list(_new_dic.keys()))
