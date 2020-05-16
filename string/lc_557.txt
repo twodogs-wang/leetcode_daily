@@ -1,0 +1,26 @@
+Given a string, you need to reverse the order of characters in each word within a sentence while still preserving whitespace and initial word order.
+
+Example 1:
+Input: "Let's take LeetCode contest"
+Output: "s'teL ekat edoCteeL tsetnoc"
+--------------------------------------
+class Solution:
+    def __helper(self, s):
+        _ans = ""
+        for i in range(len(s)-1, -1, -1):
+            _ans += s[i]
+        return _ans
+        
+    def reverseWords(self, s: str) -> str:
+        s = s.strip()
+        if s == "":
+            return ""
+        s = s.split(" ")
+        _ans = ""
+        for i in range(len(s)):
+            _temp = self.__helper(s[i])
+            if i!= len(s)-1:
+                _ans += _temp + " "
+            else:
+                _ans += _temp
+        return _ans
