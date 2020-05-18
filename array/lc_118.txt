@@ -1,0 +1,39 @@
+Given a non-negative integer numRows, generate the first numRows of Pascal's triangle.
+
+
+In Pascal's triangle, each number is the sum of the two numbers directly above it.
+
+Example:
+
+Input: 5
+Output:
+[
+     [1],
+    [1,1],
+   [1,2,1],
+  [1,3,3,1],
+ [1,4,6,4,1]
+]
+-------------------------------------------
+class Solution:
+    def generate(self, numRows: int) -> List[List[int]]:
+        if numRows==0:
+            return []
+        elif numRows==1:
+            return [[1]]
+        self.ans = []
+        for i in range(numRows):
+            if i==0:
+                self.ans.append([1])
+                continue
+            elif i==1:
+                self.ans.append([1,1])
+                continue
+            _temp = []
+            for j in range(i+1):
+                if j==0 or j==i:
+                    _temp.append(1)
+                    continue
+                _temp.append(self.ans[i-1][j]+self.ans[i-1][j-1])
+            self.ans.append(_temp[:])
+        return self.ans
