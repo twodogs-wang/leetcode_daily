@@ -1,0 +1,71 @@
+Given a 2D board and a word, find if the word exists in the grid.
+
+The word can be constructed from letters of sequentially adjacent cell, where "adjacent" cells are those horizontally or vertically neighboring. The same letter cell may not be used more than once.
+
+Example:
+
+board =
+[
+  ['A','B','C','E'],
+  ['S','F','C','S'],
+  ['A','D','E','E']
+]
+
+Given word = "ABCCED", return true.
+Given word = "SEE", return true.
+Given word = "ABCB", return false.
+----------------------------------------------
+class Solution:
+    def __get_neighbour(self, x, y, length, length0):
+        _ans = []
+        if x-1 >= 0:
+            _ans.append((x-1,y))
+            
+        if x+1 < length:
+            _ans.append((x+1,y))
+        
+        if y-1 >= 0:
+            _ans.append((x,y-1))
+        
+        if y+1 < length0:
+            _ans.append((x,y+1))
+        
+        return tuple(_ans)
+    
+    def __helper(self, board, word, level, head):
+        if self.flag:
+            return
+        elif level == len(word)-1:
+            return
+        neighbour = self.__get_neighbour(head[0], head[1], len(board),len(board[0]))
+        if len(neighbour)==0:
+            return
+        for point in neighbour:
+            if word[level+1] == board[point[0]][point[1]] and (point not in self.stack):
+                if level==len(word)-2:
+                    self.flag = True
+                    return
+                else:
+                    self.stack.append(point)
+                    self.__helper(board, word, level+1, point)
+                    self.stack.pop()
+        return
+            
+    
+    def exist(self, board: List[List[str]], word: str) -> bool:
+        self.flag = False
+        _head = []
+        self.stack = []
+        for i in range(len(board)):
+            for j in range(len(board[0])):
+                if board[i][j] == word[0]:
+                    _head.append((i,j))
+        if len(_head)>0 and len(word)==1:
+            return True
+        for head in _head:
+            if self.flag:
+                return self.flag
+            self.stack.append(head)
+            self.__helper(board, word, 0, head)
+            self.stack.pop()
+        return self.flag
