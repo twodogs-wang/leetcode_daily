@@ -1,0 +1,38 @@
+A full binary tree is a binary tree where each node has exactly 0 or 2 children.
+
+Return a list of all possible full binary trees with N nodes.  Each element of the answer is the root node of one possible tree.
+
+Each node of each tree in the answer must have node.val = 0.
+
+You may return the final list of trees in any order.
+----------------------------------------------------
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def allPossibleFBT(self, N: int) -> List[TreeNode]:
+        if N % 2 == 0:
+            return []
+        res = self.dfs(N)
+        return res
+    
+    def dfs(self, n):
+        if n == 1:
+            return [TreeNode(0)]
+        
+        combs = []
+        
+        for i in range(1, n, 2):
+            root = TreeNode(0)
+            lc = self.dfs(i)
+            rc = self.dfs(n - 1 - i)
+            for l in lc:
+                for r in rc:
+                    root = TreeNode(0)
+                    root.left = l
+                    root.right = r
+                    combs.append(root)
+        return combs
