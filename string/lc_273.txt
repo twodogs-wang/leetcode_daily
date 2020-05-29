@@ -1,0 +1,70 @@
+Convert a non-negative integer to its english words representation. Given input is guaranteed to be less than 231 - 1.
+
+Example 1:
+
+Input: 123
+Output: "One Hundred Twenty Three"
+Example 2:
+
+Input: 12345
+Output: "Twelve Thousand Three Hundred Forty Five"
+Example 3:
+
+Input: 1234567
+Output: "One Million Two Hundred Thirty Four Thousand Five Hundred Sixty Seven"
+Example 4:
+
+Input: 1234567891
+Output: "One Billion Two Hundred Thirty Four Million Five Hundred Sixty Seven Thousand Eight Hundred Ninety One"
+--------------------------------------------------------------------------------
+class Solution:
+    def numberToWords(self, num: int) -> str:
+        if num == 0:
+            return "Zero"
+        _ans = ""
+        div = 1
+        partition = 1000
+        while num//div != 0:
+            part = (num % partition)//div
+            #print(part)
+            add = self.__helper(part)
+            #print(add)
+            if add:
+                add += self.thous[div]
+                if _ans:
+                    add += " "
+                _ans = add + _ans
+            partition *= 1000
+            div *= 1000
+            #print(_ans)
+        return _ans
+    
+    
+    def __helper(self, num):
+        res = ""
+        if num//100 > 0:
+            res += self.teens[num//100] + " Hundred"
+        if num % 100 < 20: 
+            if num % 100!=0:
+                if res:
+                    res += " "
+                res += self.teens[num % 100]
+        else:
+            remain = num % 100
+            if res: res+=" "
+            res += self.tens[remain//10]
+            if remain %10 != 0: res+=" "
+            res += self.teens[remain%10]
+        return res
+    
+    
+    def __init__(self):
+        self.teens = {0:"", 1:"One", 2:"Two", 3:"Three", 4:"Four", 5:"Five", 6:"Six", 7:"Seven",\
+                      8:"Eight", 9:"Nine", 10:"Ten", 11: "Eleven", 12:"Twelve", 13:"Thirteen",\
+                      14:"Fourteen", 15:"Fifteen", 16:"Sixteen", 17:"Seventeen", 18:"Eighteen", \
+                      19:"Nineteen"}
+        
+        self.tens = {2:"Twenty", 3:"Thirty", 4:"Forty", 5:"Fifty", 6:"Sixty", 7:"Seventy",\
+                     8:"Eighty", 9:"Ninety"}
+        self.thous = {1: "", 1000: " Thousand", 1000000: " Million", 1000000000: " Billion"}
+        return
