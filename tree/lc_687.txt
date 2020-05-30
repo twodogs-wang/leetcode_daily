@@ -1,0 +1,48 @@
+Share
+Given a binary tree, find the length of the longest path where each node in the path has the same value. This path may or may not pass through the root.
+
+The length of path between two nodes is represented by the number of edges between them.
+
+ 
+
+Example 1:
+
+Input:
+
+              5
+             / \
+            4   5
+           / \   \
+          1   1   5
+----------------------------------------------------
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def longestUnivaluePath(self, root: TreeNode) -> int:
+        self.ans = 0
+        self.dfs(root)
+        return self.ans
+    
+    def dfs(self, root):
+        if not root:
+            return None, -1
+        
+        l, lc = self.dfs(root.left)
+        r, rc = self.dfs(root.right)
+        if root.val != l and root.val != r:
+            return root.val, 0
+        
+        tot = nlc = nrc = 0
+        if l == r == root.val:
+            tot = lc + rc + 2
+        if l == root.val:
+            nlc = lc + 1
+        if r == root.val:
+            nrc = rc + 1
+        
+        self.ans = max(self.ans, nlc, nrc, tot)
+        return root.val, max(nlc, nrc)

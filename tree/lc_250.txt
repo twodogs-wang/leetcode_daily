@@ -1,0 +1,43 @@
+Given a binary tree, count the number of uni-value subtrees.
+
+A Uni-value subtree means all nodes of the subtree have the same value.
+
+Example :
+
+Input:  root = [5,1,5,5,5,null,5]
+
+              5
+             / \
+            1   5
+           / \   \
+          5   5   5
+
+Output: 4
+-----------------------------------------------------
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def countUnivalSubtrees(self, root: TreeNode) -> int:
+        if not root:
+            return 0
+        self.ans = 0
+        self.__helper(root)
+        return self.ans
+    
+    def __helper(self, root): 
+        if not root:
+            return 0, True
+        
+        l, l_f = self.__helper(root.left)
+        r, r_f = self.__helper(root.right)
+        if l_f and r_f and (root.left and l==root.val or root.left==None) and (root.right \
+                                                                               and r==root.val or\
+                                                                               root.right==None):
+            self.ans+=1
+            return root.val ,True
+        else:
+            return root.val, False
