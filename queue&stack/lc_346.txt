@@ -1,0 +1,45 @@
+Given a stream of integers and a window size, calculate the moving average of all integers in the sliding window.
+
+Example:
+
+MovingAverage m = new MovingAverage(3);
+m.next(1) = 1
+m.next(10) = (1 + 10) / 2
+m.next(3) = (1 + 10 + 3) / 3
+m.next(5) = (10 + 3 + 5) / 3
+------------------------------------
+
+class MovingAverage {
+
+    /** Initialize your data structure here. */
+    int capacity = 0;
+    int size = 0;
+    Queue<Integer> queue = new LinkedList<Integer>();
+    int sum = 0;
+    public MovingAverage(int size) {
+        this.capacity = size;
+    }
+    
+    public double next(int val) {
+        if(this.size < this.capacity){
+            this.sum += val;
+            this.size += 1;
+            this.queue.add(val);
+            return this.sum/Double.valueOf(this.size);
+        }
+        else{
+            int temp = this.queue.poll();
+            this.sum -= temp;
+            this.size -= 1;
+            return next(val);          
+        }
+        
+        }
+    }
+
+
+/**
+ * Your MovingAverage object will be instantiated and called as such:
+ * MovingAverage obj = new MovingAverage(size);
+ * double param_1 = obj.next(val);
+ */
