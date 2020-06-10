@@ -1,0 +1,69 @@
+Given a binary tree, return all duplicate subtrees. For each kind of duplicate subtrees, you only need to return the root node of any one of them.
+
+Two trees are duplicate if they have the same structure with same node values.
+
+Example 1:
+
+        1
+       / \
+      2   3
+     /   / \
+    4   2   4
+       /
+      4
+The following are two duplicate subtrees:
+
+      2
+     /
+    4
+and
+
+    4
+Therefore, you need to return above trees' root in the form of a list.
+-----------------------------------------------------------------------------------------------
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    List<TreeNode> ans;
+    HashMap<String, Integer> seen;
+    HashMap<String, Integer> added;
+    public List<TreeNode> findDuplicateSubtrees(TreeNode root) {
+        this.ans = new ArrayList<TreeNode>();
+        if(root==null){return ans;}
+        this.seen = new HashMap<String, Integer>();
+        this.added = new HashMap<String, Integer>();
+        postorder(root);
+        return ans;
+        
+    }
+    
+    
+    private StringBuilder postorder(TreeNode root){
+        if(root==null){return new StringBuilder("end");}
+        StringBuilder left = postorder(root.left);
+        StringBuilder right = postorder(root.right);
+        String curr = left.toString() + right.toString() + String.valueOf(root.val);
+        if (seen.containsKey(curr) && !added.containsKey(curr)){
+            ans.add(root);
+            added.put(curr,0);
+        }
+        else{
+            seen.put(curr,0);
+        }
+        return new StringBuilder(curr);
+        
+    }
+}
