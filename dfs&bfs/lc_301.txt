@@ -1,0 +1,60 @@
+Remove the minimum number of invalid parentheses in order to make the input string valid. Return all possible results.
+
+Note: The input string may contain letters other than the parentheses ( and ).
+
+Example 1:
+
+Input: "()())()"
+Output: ["()()()", "(())()"]
+Example 2:
+
+Input: "(a)())()"
+Output: ["(a)()()", "(a())()"]
+Example 3:
+
+Input: ")("
+Output: [""]
+-----------------------------------------
+class Solution {
+    public List<String> removeInvalidParentheses(String s) {
+        List<String> ans = new ArrayList<String>();
+        Queue<String> queue = new LinkedList<String>();
+        HashSet<String> set = new HashSet();
+        set.add(s);
+        queue.offer(s);
+        
+        while (!queue.isEmpty()){
+           if(ans.size()>0){break;}
+            int size = queue.size();
+            for (int j=0;j<size;j++){
+                String curr = queue.poll();
+                if(isValid(curr)){ans.add(curr);}
+                for (int i=0;i<curr.length();i++){
+                    if(curr.charAt(i)=='(' || curr.charAt(i)==')'){
+                        String temp = curr.substring(0,i) + curr.substring(i+1);
+                        if (!set.contains(temp)){
+                            set.add(temp);
+                            queue.offer(temp);
+                        }
+                    }
+                }
+            }
+                }
+        return ans;
+    
+    }
+    
+    private boolean isValid(String s){
+        //Stack<String> stack = new Stack<>();
+        int count = 0;
+        for (int i=0;i<s.length();i++){
+            if(s.charAt(i)=='('){count++;}
+            else if(s.charAt(i)==')'){
+                count--;
+                if(count<0){return false;}
+            }
+             
+        }
+        return count==0;
+    }
+}

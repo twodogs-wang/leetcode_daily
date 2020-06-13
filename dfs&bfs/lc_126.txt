@@ -1,0 +1,44 @@
+class Solution:
+    def findLadders(self, beginWord: str, endWord: str, wordList: List[str]) -> List[List[str]]:
+        if endWord not in wordList:
+            return []
+        graph = collections.defaultdict(set)
+        wordList.append(beginWord)
+        for word in wordList:
+            for i in range(len(word)):
+                new_word = (word[:i]+"*"+word[i+1:])
+                graph[word].add(new_word)
+                graph[new_word].add(word)
+        wordList.pop()
+        self.ans = []
+        self.dfs(beginWord, endWord, graph)
+        return self.ans
+        
+        
+    def getNeighbors(self,graph ,word):
+        ans = set()
+        for w1 in graph[word]:
+            for w2 in graph[w1]:
+                ans.add(w2)
+        ans.remove(word)
+        return ans
+        
+        
+    def dfs(self,beginWord, endWord,graph):
+        queue = collections.deque()
+        queue.append( (beginWord,[beginWord]) )
+        visited = {beginWord:0}
+        while len(queue)>0:
+            size = len(queue)
+            if len(self.ans)>0:
+                return
+            for i in range(size):
+                wd,path = queue.popleft()
+                visited[wd]=0
+                for nei in self.getNeighbors(graph,wd):
+                    if nei==endWord:
+                        #path.add(nei)
+                        self.ans.append(path+[nei])
+                    elif nei in visited:
+                        continue
+                    queue.append((nei,path+[nei]))
