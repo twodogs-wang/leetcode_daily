@@ -1,0 +1,60 @@
+Given a non-empty string s and a dictionary wordDict containing a list of non-empty words, determine if s can be segmented into a space-separated sequence of one or more dictionary words.
+
+Note:
+
+The same word in the dictionary may be reused multiple times in the segmentation.
+You may assume the dictionary does not contain duplicate words.
+Example 1:
+
+Input: s = "leetcode", wordDict = ["leet", "code"]
+Output: true
+Explanation: Return true because "leetcode" can be segmented as "leet code".
+Example 2:
+
+Input: s = "applepenapple", wordDict = ["apple", "pen"]
+Output: true
+Explanation: Return true because "applepenapple" can be segmented as "apple pen apple".
+             Note that you are allowed to reuse a dictionary word.
+Example 3:
+
+Input: s = "catsandog", wordDict = ["cats", "dog", "sand", "and", "cat"]
+Output: false
+--------------------------------------------------------------------------------------------------
+class Solution {
+    public boolean wordBreak(String s, List<String> wordDict) {
+        if(s==null || s.length()==0){return true;}
+        
+        boolean[] dp = new boolean[s.length() + 1];
+        for(int i=1;i<dp.length;i++){dp[i]=false;}
+        dp[0]=true;
+        
+        HashMap<Integer,ArrayList<String>> map = new HashMap<>();
+        ArrayList<Integer> keys = new ArrayList<>();
+        for(int i=0;i<wordDict.size();i++){
+            String temp = wordDict.get(i);
+            if(map.containsKey(temp.length())){map.get(temp.length()).add(temp);}
+            else{
+                keys.add(temp.length());
+                ArrayList<String> arr= new ArrayList<String>();
+                arr.add(temp);
+                map.put(temp.length(),arr);
+            }
+        }
+        Collections.sort(keys);
+        for(int i=0;i<s.length()+1;i++){
+            for(int j=0;j<keys.size();j++){
+                int k = keys.get(j);
+                //System.out.println(k);
+                if(i-k<0){continue;}
+                
+                ArrayList<String> values = map.get(k);
+                String sub_str = s.substring(i-k,i);
+                //System.out.println(sub_str);
+                if(values.contains(sub_str)){
+                    dp[i] = (dp[i] || dp[i-k]);    
+                }
+            }
+        }
+        return dp[dp.length-1];
+    }
+}

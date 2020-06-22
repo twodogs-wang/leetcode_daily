@@ -1,0 +1,32 @@
+Given n, how many structurally unique BST's (binary search trees) that store values 1 ... n?
+
+Example:
+
+Input: 3
+Output: 5
+Explanation:
+Given n = 3, there are a total of 5 unique BST's:
+
+   1         3     3      2      1
+    \       /     /      / \      \
+     3     2     1      1   3      2
+    /     /       \                 \
+   2     1         2                 3
+---------------------------------------------------------
+class Solution {
+    public int numTrees(int n) {
+        HashMap<Integer, Integer> dp = new HashMap<Integer, Integer>();
+        dp.put(0,1);
+        dp.put(1,1);
+        dp.put(2,2);
+        for(int i=3;i<n+1;i++){
+            int temp = 0;
+            for (int left=0;left<i;left++){
+                int right = i- left -1;
+                temp += dp.get(left) * dp.get(right);
+            }
+            dp.put(i,temp);
+        }
+        return dp.get(n);
+    }
+}
