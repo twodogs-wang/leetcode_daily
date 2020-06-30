@@ -1,0 +1,65 @@
+Given a binary search tree (BST) with duplicates, find all the mode(s) (the most frequently occurred element) in the given BST.
+
+Assume a BST is defined as follows:
+
+The left subtree of a node contains only nodes with keys less than or equal to the node's key.
+The right subtree of a node contains only nodes with keys greater than or equal to the node's key.
+Both the left and right subtrees must also be binary search trees.
+ 
+-----------------------------------------------------------
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+
+import java.util.Map;
+import java.util.HashMap;
+class Solution {
+    HashMap<Integer, Integer> freq;
+    int[] ans;
+    int max;
+    public int[] findMode(TreeNode root) {
+        this.freq = new HashMap<Integer, Integer>();
+        this.max = 0;
+        helper(root);
+        ArrayList<Integer> res = new ArrayList<Integer>();
+        for(int key:this.freq.keySet()){
+            if(this.freq.get(key)==max){
+                res.add(key);
+            }
+        }
+        this.ans = new int[res.size()];
+        for (int i=0;i<res.size();i++){
+            this.ans[i] = res.get(i);
+        }
+        return this.ans;
+    }
+    
+    private void helper(TreeNode root){
+        if(root==null){return;}
+        if(this.max==0){this.max=1;}
+        if(this.freq.containsKey(root.val)){
+            int temp = this.freq.get(root.val);
+            this.freq.put(root.val, temp+1);
+            if(this.freq.get(root.val)>this.max){
+                this.max = this.freq.get(root.val);
+            }
+        }
+        else{
+            this.freq.put(root.val,1);
+        }
+        helper(root.left);
+        helper(root.right);
+    }
+}

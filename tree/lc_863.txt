@@ -1,0 +1,57 @@
+We are given a binary tree (with root node root), a target node, and an integer value K.
+
+Return a list of the values of all nodes that have a distance K from the target node.  The answer can be returned in any order.
+---------------------------------------------
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    HashMap<TreeNode, TreeNode> map;
+    List<Integer> ans;
+    //List<Integer> sub_ans
+    public List<Integer> distanceK(TreeNode root, TreeNode target, int K) {
+        this.ans = new ArrayList<Integer>();
+        this.map = new HashMap<TreeNode, TreeNode>();
+        traverse(root); 
+        helper(target, K, null);
+        return this.ans;
+    }
+    
+    private void traverse(TreeNode root){
+        if(root==null){return;}
+        if(root.left!=null){
+            this.map.put(root.left, root);
+        }
+        if(root.right!=null){
+            this.map.put(root.right, root);
+        }
+        traverse(root.left);
+        traverse(root.right);
+    }
+    
+    private void helper(TreeNode root, int K, TreeNode prev){
+        if(root==null){return;}
+        if(K==0){
+            this.ans.add(root.val);
+            return;
+        }
+        
+        if(root.left!=null && root.left!=prev){
+            helper(root.left,K-1,root);
+        }
+        if(root.right!=null && root.right!=prev){
+            helper(root.right,K-1,root);
+        }
+        
+        if(this.map.containsKey(root) && prev!=map.get(root)){
+            helper(map.get(root),K-1,root);
+        }
+        return;
+    }
+}
