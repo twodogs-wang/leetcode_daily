@@ -1,0 +1,52 @@
+Given a non-empty string s and a dictionary wordDict containing a list of non-empty words, add spaces in s to construct a sentence where each word is a valid dictionary word. Return all such possible sentences.
+
+Note:
+
+The same word in the dictionary may be reused multiple times in the segmentation.
+You may assume the dictionary does not contain duplicate words.
+Example 1:
+
+Input:
+s = "catsanddog"
+wordDict = ["cat", "cats", "and", "sand", "dog"]
+Output:
+[
+  "cats and dog",
+  "cat sand dog"
+]
+------------------------------------------------------------------
+class Solution {
+    HashMap<String, List<String>> memory;
+    List<String> wordDict;
+    public List<String> wordBreak(String s, List<String> wordDict) {
+        this.memory = new HashMap<>();
+        this.wordDict = wordDict;
+        return dfs(s);
+    }
+    
+    private List<String> dfs(String s){
+        if(s==null || s.equals("")){
+            return new ArrayList<String>();
+        }
+        if(this.memory.containsKey(s)){
+            return this.memory.get(s);
+        }
+        List<String> temp = new ArrayList<String>();
+        for(String str:this.wordDict){
+            if(!s.startsWith(str)){
+                continue;
+            }
+            else if(str.equals(s)){
+                temp.add(str);
+            }
+            else{
+                List<String> here_on_words = dfs(s.substring(str.length()));
+                for(String word:here_on_words){
+                    temp.add(str + " " + word);
+                }
+            }
+        }
+        this.memory.put(s,temp);
+        return temp;
+    }
+}
