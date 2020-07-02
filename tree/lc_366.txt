@@ -1,0 +1,48 @@
+Given a binary tree, collect a tree's nodes as if you were doing this: Collect and remove all leaves, repeat until the tree is empty.
+
+ 
+
+Example:
+
+Input: [1,2,3,4,5]
+  
+          1
+         / \
+        2   3
+       / \     
+      4   5    
+
+Output: [[4,5,3],[2],[1]]
+------------------------------
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def findLeaves(self, root: TreeNode) -> List[List[int]]:
+        if not root:
+            return []
+        if root.left==None and root.right==None:
+            return [[root.val]]
+        self.ans = []
+        while root.left or root.right:
+            self.temp = []
+            self.helper(root, None, True)
+            self.ans.append(self.temp[:])
+        self.ans.append([root.val])
+        return self.ans
+        
+    def helper(self, root, parent, flag):
+        if not root:
+            return
+        if root.left==None and root.right==None:
+            self.temp.append(root.val)
+            if parent:
+                if flag:
+                    parent.left = None
+                else:
+                    parent.right = None
+        self.helper(root.left, root, True)
+        self.helper(root.right, root, False)
