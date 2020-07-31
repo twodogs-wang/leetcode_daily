@@ -1,0 +1,31 @@
+Given an unsorted array of integers, find the length of longest increasing subsequence.
+
+Example:
+
+Input: [10,9,2,5,3,7,101,18]
+Output: 4 
+Explanation: The longest increasing subsequence is [2,3,7,101], therefore the length is 4. 
+-----------------------------------------------
+class Solution {
+    public int lengthOfLIS(int[] nums) {
+        int[] dp = new int[nums.length];
+        int size = 0;
+        for(int x:nums){
+            int i=0;
+            int j=size;
+            while (i!=j){
+                int m = (i+j)/2;
+                if(dp[m]<x){
+                    i=m+1;
+                }
+                else{
+                    j=m;
+                }
+            }
+            dp[i]=x;
+            size = Math.max(size,i+1);
+        }
+        
+        return size;
+    }
+}
