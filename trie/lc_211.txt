@@ -1,0 +1,65 @@
+Design a data structure that supports the following two operations:
+
+void addWord(word)
+bool search(word)
+search(word) can search a literal word or a regular expression string containing only letters a-z or .. A . means it can represent any one letter.
+
+Example:
+
+addWord("bad")
+addWord("dad")
+addWord("mad")
+search("pad") -> false
+search("bad") -> true
+search(".ad") -> true
+search("b..") -> true
+-----------------------------------------------------
+class WordDictionary {
+    public class Node{
+        public Node[] kids = new Node[26];
+        public String item = "";
+    }
+    
+    /** Initialize your data structure here. */
+    //public WordDictionary() {
+        private Node root = new Node();
+    
+    
+    /** Adds a word into the data structure. */
+    public void addWord(String word) {
+        Node node = this.root;
+        for(char c:word.toCharArray()){
+            if(node.kids[c-'a']==null){
+                node.kids[c-'a']=new Node();
+                //node = node.kids[c-'a'];
+            }
+            node = node.kids[c-'a'];
+        }
+        node.item=word;
+    }
+    
+    /** Returns if the word is in the data structure. A word could contain the dot character '.' to represent any one letter. */
+    public boolean search(String word) {
+        return search_helper(word.toCharArray(), 0, root);
+    }
+    
+    private boolean search_helper(char[] chars, int k, Node node){
+        if(k==chars.length){
+            return !node.item.equals("");
+        }
+        
+        if(chars[k]!='.'){
+            return node.kids[chars[k]-'a']!=null && search_helper(chars,k+1, node.kids[chars[k]-'a']);
+        }
+        
+        else{
+            for(int i=0;i<node.kids.length;i++){
+                if(node.kids[i]!=null && search_helper(chars,k+1,node.kids[i])){
+                        return true;
+                }
+            }
+        }
+        return false;
+    }
+}
+    
