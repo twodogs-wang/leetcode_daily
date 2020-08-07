@@ -1,0 +1,69 @@
+Given a set of words (without duplicates), find all word squares you can build from them.
+
+A sequence of words forms a valid word square if the kth row and column read the exact same string, where 0 ≤ k < max(numRows, numColumns).
+
+For example, the word sequence ["ball","area","lead","lady"] forms a word square because each word reads the same both horizontally and vertically.
+
+b a l l
+a r e a
+l e a d
+l a d y
+-----------------------------------
+class Solution {
+    class Node{
+        Node[] kids = new Node[26];
+        String item;
+    }
+    
+    private void addWords(String[] words, Node root){
+        for(String word:words){
+            Node node = root;
+            for(char c:word.toCharArray()){
+                if(node.kids[c-'a']==null)node.kids[c-'a']=new Node();
+                node = node.kids[c-'a'];
+            }
+            node.item = word;
+        }
+    }
+    
+    private void helper(List<List<String>> res,int len, int row, int col,Node[] rows){
+        if(row==col && row==len){
+            List<String> temp = new ArrayList<String>();
+            for(int i=0;i<rows.length;i++)temp.add(rows[i].item);
+            res.add(temp);
+            return;
+        }
+        else{
+            if(col<len){
+                Node pre_row = rows[row];
+                Node pre_col = rows[col];
+                for(int i=0;i<26;i++){
+                    if(rows[row].kids[i]!=null && rows[col].kids[i]!=null){
+                        rows[row]=rows[row].kids[i];
+                        //rows[col]=rows
+                        if(col!=row)rows[col]=rows[col].kids[i];
+                        helper(res,len,row,col+1,rows);
+                        rows[row]=pre_row;
+                        if(row!=col)rows[col]=pre_col;
+                    }
+                }   
+            }
+            else{
+                helper(res,len,row+1,row+1,rows);
+            }
+        }
+        
+    }
+    
+    public List<List<String>> wordSquares(String[] words) {
+        //HashSet<String> Set = new HashSet<String>(Arrays.asList(words));
+        Node root = new Node();
+        addWords(words,root);    
+        List<List<String>> res = new ArrayList<>();
+        Node[] rows = new Node[words[0].length()];
+        for(int i=0;i<rows.length;i++) rows[i]=root;
+        helper(res,words[0].length(),0,0,rows);
+        return res;
+    }
+    
+}
