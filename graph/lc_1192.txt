@@ -1,0 +1,34 @@
+There are n servers numbered from 0 to n-1 connected by undirected server-to-server connections forming a network where connections[i] = [a, b] represents a connection between servers a and b. Any server can reach any other server directly or indirectly through the network.
+
+A critical connection is a connection that, if removed, will make some server unable to reach some other server.
+
+Return all critical connections in the network in any order.
+---------------------------------------------------
+class Solution:
+    def criticalConnections(self, n: int, connections: List[List[int]]) -> List[List[int]]:
+        graph = self.build_graph(connections)
+        connections = set(map(tuple,map(sorted,connections)))
+        rank = [-2]*n #0<=rank<n visiting and rank=n visited
+        self.dfs(0,0,rank,graph,connections)
+        return connections
+        
+    def build_graph(self,connections):
+        graph = collections.defaultdict(list)
+        for item in connections:
+            graph[item[1]].append(item[0])
+            graph[item[0]].append(item[1])
+        return graph
+    
+    def dfs(self,node,depth,rank,graph,connections):
+        if rank[node]>=0:
+            return rank[node]
+        rank[node] = depth
+        min_back_depth = len(rank)
+        for nei in graph[node]:
+            if rank[nei]==depth-1: #just came from there
+                continue
+            back_depth = self.dfs(nei,depth+1,rank,graph,connections)
+            if back_depth<=depth:
+                connections.discard(tuple(sorted((node,nei))))
+            min_back_depth = min(min_back_depth,back_depth)
+        return min_back_depth
