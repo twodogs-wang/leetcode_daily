@@ -1,0 +1,28 @@
+On an N x N board, the numbers from 1 to N*N are written boustrophedonically starting from the bottom left of the board, and alternating direction each row.  For example, for a 6 x 6 board, the numbers are written as follows:
+-------------------------------
+class Solution:
+    def snakesAndLadders(self, board: List[List[int]]) -> int:
+        queue = collections.deque()
+        seen = set()
+        queue.append((1,0))
+        while queue:
+            label,step = queue.popleft()
+            r,c = self.label_to_position(label,len(board))
+            if board[r][c]!=-1:
+                label=board[r][c]
+            if label==len(board)*len(board[0]):
+                return step
+            for x in range(1,7):
+                temp = label+x
+                if temp<=len(board)*len(board[0]) and temp not in seen:
+                    seen.add(temp)
+                    queue.append((temp,step+1))
+        return -1
+                
+    
+    def label_to_position(self,label,n):
+            r, c = divmod(label-1, n)
+            if r % 2 == 0:
+                return n-1-r, c
+            else:
+                return n-1-r, n-1-c
