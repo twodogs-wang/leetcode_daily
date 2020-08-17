@@ -1,0 +1,43 @@
+Given a data stream input of non-negative integers a1, a2, ..., an, ..., summarize the numbers seen so far as a list of disjoint intervals.
+
+For example, suppose the integers from the data stream are 1, 3, 7, 2, 6, ..., then the summary will be:
+
+[1, 1]
+[1, 1], [3, 3]
+[1, 1], [3, 3], [7, 7]
+[1, 3], [7, 7]
+[1, 3], [6, 7]
+-------------------------------------------------
+class SummaryRanges(object):
+    def __init__(self):
+        self.intervals = []
+
+    def addNum(self, val):
+        # find location
+        low, high = 0, len(self.intervals) - 1
+        while low <= high:
+            mid = (low + high) // 2
+            elem = self.intervals[mid]
+            if elem[0] <= val <= elem[1]:
+                return
+            elif elem[0] > val:
+                high = mid - 1
+            else:
+                low = mid + 1
+
+        # insert the interval
+        pos = low
+        self.intervals.insert(pos, [val, val])
+
+        # merge with next interval
+        if pos + 1 < len(self.intervals) and val == self.intervals[pos + 1][0] - 1:
+            self.intervals[pos][1] = self.intervals[pos + 1][1]
+            self.intervals.pop(pos+1)
+        # merge with prev interval
+        if pos - 1 >= 0 and val == self.intervals[pos - 1][1] + 1:
+            self.intervals[pos - 1][1] = self.intervals[pos][1]
+            self.intervals.pop(pos)
+            
+
+    def getIntervals(self):
+        return self.intervals

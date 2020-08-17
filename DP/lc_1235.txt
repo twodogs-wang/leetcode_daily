@@ -1,0 +1,43 @@
+We have n jobs, where every job is scheduled to be done from startTime[i] to endTime[i], obtaining a profit of profit[i].
+
+You're given the startTime , endTime and profit arrays, you need to output the maximum profit you can take such that there are no 2 jobs in the subset with overlapping time range.
+
+If you choose a job that ends at time X you will be able to start another job that starts at time X.
+--------------------------------------------------
+class Solution {
+    public int jobScheduling(int[] startTime, int[] endTime, int[] profit) {
+        Job[] jobs = new Job[profit.length];
+        for(int i=0;i<profit.length;i++){
+            jobs[i] = new Job(endTime[i],startTime[i],profit[i]);
+        }
+        Arrays.sort(jobs,(a,b)->(a.endTime-b.endTime));
+        int[] dp = new int[profit.length];
+        dp[0] = jobs[0].profit;
+        for (int i=1;i<jobs.length;i++){
+            int tmp = -1;
+            //int profit_=jobs[i].profit;
+            for(int j=i-1;j>=0;j--){
+                if(jobs[j].endTime<=jobs[i].startTime){
+                    tmp=j;
+                    break;
+                }
+            }
+            //if (tmp!=-1) profit_ += dp[tmp];
+            if (tmp!=-1) dp[i] = Math.max(dp[i-1],jobs[i].profit+dp[tmp]);
+            else dp[i] = Math.max(dp[i-1],jobs[i].profit);
+        }
+        return dp[jobs.length-1];
+    }
+    
+
+    class Job {
+        public int endTime;
+        public int startTime;
+        public int profit;
+        public Job(int endTime,int startTime,int profit){
+            this.endTime=endTime;
+            this.startTime=startTime;
+            this.profit=profit;
+        }
+    }
+}
