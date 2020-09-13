@@ -1,0 +1,26 @@
+Given a non-negative integer, you could swap two digits at most once to get the maximum valued number. Return the maximum valued number you could get.
+
+Example 1:
+Input: 2736
+Output: 7236
+Explanation: Swap the number 2 and the number 7.
+Example 2:
+Input: 9973
+Output: 9973
+Explanation: No swap.
+----------------------------------
+class Solution:
+    def maximumSwap(self, num: int) -> int:
+        num = list(str(num))
+        cache = {}
+        for i in range(len(num)):
+            cache[int(num[i])]=i
+        for i in range(len(num)):
+            for j in range(9,int(num[i]),-1):
+                if j in cache and cache[j]>i:
+                    num[i],num[cache[j]]=num[cache[j]],num[i]
+                    num="".join(num)
+                    return int(num)
+        num="".join(num)
+        return int(num)
+        
